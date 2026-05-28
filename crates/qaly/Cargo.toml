@@ -12,7 +12,7 @@ name = "qaly"
 path = "src/main.rs"
 
 [dependencies]
-qaly-core = { git = "https://github.com/BigBangStudios/sim-mcp", tag = "v0.3.0" }
+qaly-core = { git = "https://github.com/qaly-dev/qaly-core", tag = "v0.3.0" }
 serde_json.workspace = true
 clap.workspace = true
 anyhow.workspace = true
