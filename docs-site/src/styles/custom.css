@@ -1,0 +1,6 @@
+/* Qaly brand customizations */
+:root {
+  --sl-color-accent-low: #0d1f4a;
+  --sl-color-accent: #1a56db;
+  --sl-color-accent-high: #93c5fd;
+}

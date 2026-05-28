@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.vercel/
+.astro/
+
+# Yarn Berry — platform-specific, not portable
+.yarn/unplugged/
+.yarn/install-state.gz
+.yarn/build-state.yml

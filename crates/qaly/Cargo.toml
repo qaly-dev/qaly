@@ -1,0 +1,24 @@
+[package]
+name = "qaly"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description.workspace = true
+
+[[bin]]
+name = "qaly"
+path = "src/main.rs"
+
+[dependencies]
+qaly-core = { git = "https://github.com/BigBangStudios/sim-mcp", tag = "v0.3.0" }
+serde_json.workspace = true
+clap.workspace = true
+anyhow.workspace = true
+toml.workspace = true
+dirs.workspace = true
+tempfile.workspace = true
+walkdir.workspace = true
+indicatif = "0.17"
+dialoguer = { version = "0.11", default-features = false, features = ["password"] }
