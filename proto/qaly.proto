@@ -1,0 +1,259 @@
+syntax = "proto3";
+package qaly.v1;
+
+// ── Shared ────────────────────────────────────────────────────────────────────
+
+message Empty {}
+
+message SessionId {
+  string id = 1;
+}
+
+message BBox {
+  int32 x = 1;
+  int32 y = 2;
+  int32 width = 3;
+  int32 height = 4;
+}
+
+message Element {
+  string id                   = 1;
+  string label                = 2;
+  string resource_id          = 3;
+  string accessibility_label  = 4;
+  BBox   bounds               = 5;
+  bool   clickable            = 6;
+  bool   editable             = 7;
+  repeated Element children   = 8;
+}
+
+message ActionResponse {
+  bool   success = 1;
+  string message = 2;
+}
+
+// ── SessionService ────────────────────────────────────────────────────────────
+
+message CreateSessionRequest {
+  optional string device_serial = 1;
+}
+
+message SessionInfo {
+  string id            = 1;
+  string device_serial = 2;
+}
+
+message SessionList {
+  repeated SessionInfo sessions = 1;
+}
+
+service SessionService {
+  rpc CreateSession (CreateSessionRequest) returns (SessionInfo);
+  rpc DestroySession(SessionId)            returns (Empty);
+  rpc ListSessions  (Empty)                returns (SessionList);
+}
+
+// ── DeviceService ─────────────────────────────────────────────────────────────
+
+message PerceiveRequest {
+  string session_id = 1;
+  bool   text_only  = 2;
+}
+
+message PerceiveResponse {
+  repeated Element elements          = 1;
+  optional bytes   screenshot_png    = 2;
+  optional string  foreground_package = 3;
+}
+
+message TapRequest {
+  string session_id = 1;
+  string target     = 2;
+}
+
+message FillRequest {
+  string session_id = 1;
+  string target     = 2;
+  string text       = 3;
+}
+
+message TypeTextRequest {
+  string session_id = 1;
+  string text       = 2;
+}
+
+enum SwipeDirection {
+  UP    = 0;
+  DOWN  = 1;
+  LEFT  = 2;
+  RIGHT = 3;
+}
+
+message SwipeRequest {
+  string         session_id = 1;
+  SwipeDirection direction  = 2;
+}
+
+message PressKeyRequest {
+  string session_id = 1;
+  string keycode    = 2;
+}
+
+message WaitForRequest {
+  string session_id  = 1;
+  string target      = 2;
+  uint32 timeout_ms  = 3;
+}
+
+message AssertRequest {
+  string session_id = 1;
+  string target     = 2;
+}
+
+message LaunchRequest {
+  string session_id = 1;
+  string package    = 2;
+}
+
+message ShellRequest {
+  string session_id = 1;
+  string command    = 2;
+}
+
+message ShellResponse {
+  string stdout    = 1;
+  int32  exit_code = 2;
+}
+
+message ScreenshotRequest {
+  string session_id = 1;
+}
+
+message ScreenshotResponse {
+  bytes png = 1;
+}
+
+service DeviceService {
+  rpc Perceive     (PerceiveRequest)   returns (PerceiveResponse);
+  rpc Tap          (TapRequest)        returns (ActionResponse);
+  rpc Fill         (FillRequest)       returns (ActionResponse);
+  rpc TypeText     (TypeTextRequest)   returns (ActionResponse);
+  rpc Swipe        (SwipeRequest)      returns (ActionResponse);
+  rpc PressKey     (PressKeyRequest)   returns (ActionResponse);
+  rpc WaitFor      (WaitForRequest)    returns (ActionResponse);
+  rpc AssertVisible(AssertRequest)     returns (ActionResponse);
+  rpc LaunchApp    (LaunchRequest)     returns (ActionResponse);
+  rpc Shell        (ShellRequest)      returns (ShellResponse);
+  rpc Screenshot   (ScreenshotRequest) returns (ScreenshotResponse);
+}
+
+// ── TestService ───────────────────────────────────────────────────────────────
+
+message BeginTestRequest {
+  string session_id = 1;
+  string goal       = 2;
+  string test_file  = 3;
+  string app        = 4;
+}
+
+// Note: PASS = 0 is proto3's implicit default. Treat absent/zero value as PASS only
+// when status is expected to be set — use TestEvent.started to distinguish running tests.
+enum TestStatus {
+  PASS = 0;
+  FAIL = 1;
+  SKIP = 2;
+}
+
+message StepTrace {
+  uint32 index           = 1;
+  string action          = 2;
+  string target          = 3;
+  bool   healed          = 4;
+  string screenshot_path = 5;
+}
+
+message FailedStep {
+  uint32 index  = 1;
+  string reason = 2;
+}
+
+message TestResult {
+  string              test_name         = 1;
+  TestStatus          status            = 2;
+  repeated StepTrace  steps             = 3;
+  optional FailedStep failed_step       = 4;
+  optional string     debug_report_path = 5;
+}
+
+message RunTestRequest {
+  string session_id = 1;
+  string test_file  = 2;
+  string test_name  = 3;
+  bool   debug      = 4;
+}
+
+// RunTests manages its own device pool internally (workers sessions).
+// It does NOT take a session_id — it is a global orchestration command.
+message RunTestsRequest {
+  string          test_file  = 1;
+  optional string filter     = 2;
+  uint32          workers    = 3;
+  bool            headless   = 4;
+  optional string avd_name   = 5;
+  bool            auto_heal  = 6;
+  bool            debug      = 7;
+}
+
+message TestStarted {
+  string test_name = 1;
+}
+
+message TestEvent {
+  oneof event {
+    TestStarted started = 1;
+    StepTrace   step    = 2;
+    TestResult  result  = 3;
+  }
+}
+
+message HealRequest {
+  string          file       = 1;
+  string          goal       = 2;
+  uint32          step_index = 3;
+  // Agent-supplied corrected step (required for agent-driven healing)
+  optional string action     = 4;  // e.g. "tap", "fill", "swipe"
+  optional string target     = 5;  // element selector
+  optional string text       = 6;  // text for fill/type actions
+}
+
+message HealResponse {
+  bool   success    = 1;
+  string new_target = 2;
+  uint32 step_index = 3;
+}
+
+service TestService {
+  rpc BeginTest(BeginTestRequest) returns (Empty);
+  rpc EndTest  (SessionId)        returns (TestResult);
+  rpc RunTest  (RunTestRequest)   returns (TestResult);
+  rpc RunTests (RunTestsRequest)  returns (stream TestEvent);
+  rpc HealStep (HealRequest)      returns (HealResponse);
+}
+
+// ── SnapshotService ───────────────────────────────────────────────────────────
+
+message SnapshotRequest {
+  string session_id = 1;
+  string name       = 2;
+}
+
+message SnapshotList {
+  repeated string names = 1;
+}
+
+service SnapshotService {
+  rpc Save   (SnapshotRequest) returns (Empty);
+  rpc Restore(SnapshotRequest) returns (Empty);
+  rpc List   (SessionId)       returns (SnapshotList);
+  rpc Delete (SnapshotRequest) returns (Empty);
+}

@@ -1,0 +1,61 @@
+---
+title: What is Qaly?
+description: Qaly is the mobile testing tool built for AI agents — the Playwright MCP of Android.
+template: splash
+hero:
+  tagline: Record once. Replay in under a second. Heal automatically.
+  actions:
+    - text: Get started (MCP)
+      link: /getting-started/mcp
+      icon: right-arrow
+    - text: Get started (CLI)
+      link: /getting-started/cli
+      icon: right-arrow
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Why Qaly?
+
+Traditional mobile test tools were built for humans writing brittle selectors.
+Qaly was built for AI agents: natural-language selectors, event-driven waits with no flakiness,
+and a replay engine that is **7× faster** than any ADB-based tool.
+
+Works with any Android app — native, React Native, Jetpack Compose, or Flutter.
+
+<CardGrid stagger>
+  <Card title="AI-native" icon="rocket">
+    Natural language selectors. No brittle XPaths. Works as an MCP server — your AI agent records, replays, and heals tests autonomously.
+  </Card>
+  <Card title="7× faster than ADB" icon="star">
+    In-memory accessibility tree via a device agent replaces `uiautomator dump` cold-start (500ms → 10ms). Event-driven waits replace polling.
+  </Card>
+  <Card title="Automatic self-healing" icon="approve-check-circle">
+    When a selector changes, Qaly finds the closest match automatically — no manual test maintenance.
+  </Card>
+  <Card title="Any framework" icon="puzzle">
+    Native Android, Jetpack Compose, React Native, and Flutter all work out of the box.
+  </Card>
+</CardGrid>
+
+## How it works
+
+1. **Record** — your AI agent (via MCP) taps through the app, and Qaly saves a `.qaly.test` file + recordings in `.qaly/`.
+2. **Replay** — `qaly-test my.qaly.test` runs all tests deterministically, no LLM needed. CI-ready.
+3. **Heal** — when UI changes break a step, Qaly's self-healing engine finds the right element and updates the recording.
+
+## Quick start
+
+```sh
+# Install
+brew install qaly-dev/tap/qaly
+
+# Add to Claude's MCP config
+echo '{"mcpServers":{"qaly":{"command":"qaly-mcp","env":{"ADB_BINARY":"/path/to/adb"}}}}' > ~/.config/claude/mcp.json
+
+# Run an existing test
+qaly-test my.qaly.test
+```
+
+See [Getting Started with MCP](/getting-started/mcp) for a full walkthrough.

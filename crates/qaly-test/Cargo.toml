@@ -1,0 +1,23 @@
+[package]
+name = "qaly-test"
+edition = "2021"
+version = "0.3.1-alpha.2"
+license = "MIT"
+repository = "https://github.com/qaly-dev/qaly"
+homepage = "https://qaly.dev"
+description = "MCP-first Android testing tool for AI agents"
+
+[[bin]]
+name = "qaly-test"
+path = "src/main.rs"
+
+[dependencies]
+clap        = { version = "4", features = ["derive"] }
+anyhow      = "1"
+tonic       = { version = "0.12", features = ["transport"] }
+prost       = "0.13"
+tokio       = { version = "1", features = ["macros", "rt-multi-thread", "process"] }
+which       = "4"
+
+[build-dependencies]
+tonic-build = "0.12"
