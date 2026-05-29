@@ -1,2 +1,3 @@
 dist/
-scripts/install.test.js
+*.tar.xz
+*.zip

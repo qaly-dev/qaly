@@ -1,19 +1,18 @@
 {
-  "name": "sim-mcp",
-  "version": "0.3.0",
-  "description": "Agent-friendly Android test recorder and runner (MCP-first)",
-  "homepage": "https://github.com/BigBangStudios/sim-mcp",
-  "repository": "github:BigBangStudios/sim-mcp",
+  "name": "qaly",
+  "version": "0.3.1-alpha.2",
+  "description": "MCP-first Android testing tool for AI agents",
+  "homepage": "https://qaly.dev",
+  "repository": "github:qaly-dev/qaly",
   "license": "MIT",
   "engines": { "node": ">=18" },
   "bin": {
-    "sim": "./bin/sim.js",
-    "sim-mcp": "./bin/sim-mcp.js",
-    "sim-test": "./bin/sim-test.js"
+    "qaly":      "./bin/qaly.js",
+    "qaly-mcp":  "./bin/qaly-mcp.js",
+    "qaly-test": "./bin/qaly-test.js"
   },
   "scripts": {
-    "postinstall": "node scripts/install.js",
-    "test": "node --test scripts/install.test.js"
+    "postinstall": "node scripts/install.js"
   },
   "files": [
     "bin/",
