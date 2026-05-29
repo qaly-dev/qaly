@@ -41,7 +41,7 @@ Works with any Android app — native, React Native, Jetpack Compose, or Flutter
 
 ## How it works
 
-1. **Record** — your AI agent (via MCP) taps through the app, and Qaly saves a `.qaly.test` file + recordings in `.qaly/`.
+1. **Record** — you write a `.qaly.test` file describing your goals; your AI agent (via MCP) taps through the app and Qaly saves the step recordings in `.qaly/`.
 2. **Replay** — `qaly-test my.qaly.test` runs all tests deterministically, no LLM needed. CI-ready.
 3. **Heal** — when UI changes break a step, Qaly's self-healing engine finds the right element and updates the recording.
 
@@ -51,11 +51,11 @@ Works with any Android app — native, React Native, Jetpack Compose, or Flutter
 # Install
 brew install qaly-dev/tap/qaly
 
-# Add to Claude's MCP config
-echo '{"mcpServers":{"qaly":{"command":"qaly-mcp","env":{"ADB_BINARY":"/path/to/adb"}}}}' > ~/.config/claude/mcp.json
+# Register with Claude (interactive wizard — detects adb, registers MCP)
+qaly init
 
 # Run an existing test
-qaly-test my.qaly.test
+qaly-test my_feature.qaly.test
 ```
 
 See [Getting Started with MCP](/getting-started/mcp) for a full walkthrough.

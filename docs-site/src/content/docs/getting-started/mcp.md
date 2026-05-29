@@ -21,7 +21,19 @@ This installs the `qaly-mcp` binary (MCP server) and the `qaly` CLI.
 
 ## Configure your AI agent
 
-Add Qaly to your MCP config. For Claude Code (`~/.config/claude/mcp.json`):
+The fastest path is the interactive wizard — it detects your Android SDK and registers `qaly-mcp` automatically:
+
+```bash
+qaly init
+```
+
+Or register manually with Claude Code:
+
+```bash
+claude mcp add qaly qaly-mcp -s user
+```
+
+If you need to set environment variables (required when the Android SDK is not in `PATH`, which is the default on macOS), add them to the MCP server config:
 
 ```json
 {
@@ -29,14 +41,15 @@ Add Qaly to your MCP config. For Claude Code (`~/.config/claude/mcp.json`):
     "qaly": {
       "command": "qaly-mcp",
       "env": {
-        "ADB_BINARY": "/Users/you/Library/Android/sdk/platform-tools/adb"
+        "ADB_BINARY": "/Users/you/Library/Android/sdk/platform-tools/adb",
+        "EMULATOR_BINARY": "/Users/you/Library/Android/sdk/emulator/emulator"
       }
     }
   }
 }
 ```
 
-Replace `ADB_BINARY` with the full path to your `adb` binary.
+> **Note:** Both `ADB_BINARY` and `EMULATOR_BINARY` must be set if the Android SDK is not in `PATH`. Without `ADB_BINARY`, Qaly cannot detect already-running emulators. Without `EMULATOR_BINARY`, spawning extra emulators for parallel runs fails.
 
 ## Start an emulator
 
