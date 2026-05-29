@@ -1,0 +1,22 @@
+{
+  "name": "sim-mcp",
+  "version": "0.3.0",
+  "description": "Agent-friendly Android test recorder and runner (MCP-first)",
+  "homepage": "https://github.com/BigBangStudios/sim-mcp",
+  "repository": "github:BigBangStudios/sim-mcp",
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "bin": {
+    "sim": "./bin/sim.js",
+    "sim-mcp": "./bin/sim-mcp.js",
+    "sim-test": "./bin/sim-test.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/install.js",
+    "test": "node --test scripts/install.test.js"
+  },
+  "files": [
+    "bin/",
+    "scripts/install.js"
+  ]
+}

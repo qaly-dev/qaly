@@ -1,0 +1,12 @@
+services:
+  sim:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      - ADB_SERVER_SOCKET=tcp:host.docker.internal:5037
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    stdin_open: true
+    volumes:
+      - ..:/workspace

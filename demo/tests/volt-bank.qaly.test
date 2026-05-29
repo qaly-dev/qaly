@@ -1,0 +1,6 @@
+app: com.voltbank.demo
+clean_state: app_data
+
+tests:
+  - goal: Send $50 to Alice Johnson and confirm the transfer
+  - goal: Verify there is a payment to Netflix for 15,99

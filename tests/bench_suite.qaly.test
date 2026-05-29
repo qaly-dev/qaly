@@ -1,0 +1,7 @@
+# Benchmark test fixture — steps covering the key action types.
+# Uses Clock app (always available) to avoid needing a specific test app.
+app: com.google.android.deskclock
+clean_state: app_data
+
+tests:
+  - bench_navigate_to_alarm_tab

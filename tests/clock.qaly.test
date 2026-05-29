@@ -1,0 +1,15 @@
+app: com.google.android.deskclock
+clean_state: app_data
+
+fixtures:
+  alarm_created: Crear una alarma a las 8:15 AM solo para lunes y miercoles luego confirmar que aparece en la lista
+
+tests:
+  - Abrir la app y verificar que existe el botón de agregar alarma
+  - Crear una alarma a las 8:15 AM solo para lunes y miercoles luego confirmar que aparece en la lista
+
+  # Estos 2 son independientes entre sí — pueden correr en paralelo
+  - goal: Agrega un label, verifica que el label haya sido agregado correctamente
+    fixture: alarm_created
+  - goal: Eliminar la alarma creada, debes verificar que este expandida antes de eliminarla luego no aparece en la lista
+    fixture: alarm_created

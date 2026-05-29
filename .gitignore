@@ -1,3 +1,4 @@
 target/
 .qaly/
 *.qaly.test.bak
+*.DS_Store
