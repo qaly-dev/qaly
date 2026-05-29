@@ -1,0 +1,7 @@
+{
+  "name": "qaly",
+  "assets": {
+    "directory": "./dist"
+  },
+  "compatibility_date": "2026-05-28"
+}
