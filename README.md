@@ -155,7 +155,6 @@ qaly shell "dumpsys battery"
 # Setup & environment
 qaly init                          # interactive wizard: detect, install, register MCP, sample test
 qaly doctor                        # read-only environment status (no changes)
-qaly migrate                       # rename legacy .sim/ recording dirs to .qaly/
 
 # Test replay
 qaly test tests/clock.qaly.test

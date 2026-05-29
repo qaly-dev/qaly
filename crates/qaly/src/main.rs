@@ -114,8 +114,6 @@ enum Command {
     /// (deprecated) Alias for `doctor`.
     #[command(hide = true)]
     SetupCheck,
-    /// Rename .sim/ recording directories to .qaly/ in the current directory tree.
-    Migrate,
 }
 
 /// Map a direction name to the proto SwipeDirection enum value.
@@ -401,32 +399,6 @@ fn install_cmdline_tools(sdk_root: &std::path::Path) -> Result<()> {
     Ok(())
 }
 
-fn run_migrate() -> Result<()> {
-    let cwd = std::env::current_dir()?;
-    let mut renamed = 0usize;
-    for entry in walkdir::WalkDir::new(&cwd)
-        .into_iter()
-        .filter_entry(|e| {
-            // Don't recurse inside a .sim we're about to rename
-            e.depth() == 0 || e.file_name() != ".sim" || !e.file_type().is_dir()
-        })
-        .filter_map(|e| e.ok())
-        .filter(|e| e.file_type().is_dir() && e.file_name() == ".sim")
-    {
-        let old = entry.path();
-        let new = old.parent().unwrap().join(".qaly");
-        if new.exists() {
-            eprintln!("skip: {} (target already exists)", old.display());
-            continue;
-        }
-        std::fs::rename(old, &new)
-            .with_context(|| format!("failed to rename {} to {}", old.display(), new.display()))?;
-        println!("renamed: {} → {}", old.display(), new.display());
-        renamed += 1;
-    }
-    println!("Done. {} director{} renamed.", renamed, if renamed == 1 { "y" } else { "ies" });
-    Ok(())
-}
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -438,7 +410,6 @@ async fn main() -> Result<()> {
         Command::Doctor => return run_init(true),
         Command::Setup => return run_init(false),
         Command::SetupCheck => return run_init(true),
-        Command::Migrate => return run_migrate(),
         _ => {}
     }
 
@@ -663,8 +634,7 @@ async fn main() -> Result<()> {
         Command::Init
         | Command::Doctor
         | Command::Setup
-        | Command::SetupCheck
-        | Command::Migrate => unreachable!(),
+        | Command::SetupCheck => unreachable!(),
     }
     Ok(())
 }

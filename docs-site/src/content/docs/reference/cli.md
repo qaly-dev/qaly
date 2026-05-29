@@ -55,10 +55,6 @@ write config, register `qaly-mcp` with your AI agent, and create a sample test.
 Report environment status (adb, emulator, AVDs) without modifying anything.
 Exits non-zero if a required tool is missing.
 
-### `qaly migrate`
-
-Renames legacy `.sim/` recording directories to `.qaly/` in the current tree.
-
 ---
 
 ## `qaly-test`
