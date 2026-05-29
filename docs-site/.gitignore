@@ -1,3 +1,6 @@
 dist/
 node_modules/
 .astro/
+.yarn/
+.pnp.cjs
+.pnp.loader.mjs
