@@ -18,6 +18,7 @@ const DAEMON_PORT: u16 = 50052;
 
 pub struct DaemonClient {
     pub session_id: String,
+    #[allow(dead_code)]
     pub device: DeviceServiceClient<Channel>,
     pub test: TestServiceClient<Channel>,
     // The CLI has no snapshot subcommands today, but the daemon exposes the

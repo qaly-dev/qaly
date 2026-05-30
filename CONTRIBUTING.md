@@ -14,6 +14,14 @@ cd qaly
 cargo build
 ```
 
+## Git hooks
+
+A pre-push hook runs `cargo clippy --workspace -- -D warnings` to catch lint errors before they reach CI. Enable it once after cloning:
+
+```sh
+git config core.hooksPath .githooks
+```
+
 ## Issues and PRs
 
 - Open issues at [github.com/qaly-dev/qaly/issues](https://github.com/qaly-dev/qaly/issues)
