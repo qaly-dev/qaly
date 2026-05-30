@@ -19,10 +19,9 @@ jobs:
       - name: Install protoc
         run: sudo apt-get update -y && sudo apt-get install -y protobuf-compiler
 
-      - name: Install stable Rust
-        run: |
-          rustup update stable
-          rustup default stable
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
 
       - name: cargo check
         run: cargo check --workspace
